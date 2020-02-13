@@ -16,14 +16,13 @@ router.get('/todos', (req, res) => {
 });
 
 router.get('/new', (req,res) => {
-  res.render('new');
+  Todo.then(todo => res.json(todo))
 });
 
 router.get('/:id/edit', (req, res) => {
   Todo.findById(req.params.id)
-  .then(todo => {
-    res.render('edit', todo);
-  });
+  .then(todo => res.json(todo)
+  );
 });
 
 router.put('/:id', (req, res) => {
@@ -33,26 +32,20 @@ router.put('/:id', (req, res) => {
     complete
   }
   Todo.findOneAndUpdate({ _id: req.params.id }, todo, { new: true }).then(
-    todo => {
-      res.redirect('/todos');
-    }
+    todo => 
+      res.json(todo)
   );
 });
 
 
 router.get('/:id', (req, res) => {
   Todo.findById(req.params.id)
-  .then(todo => {
-    res.render('show', todo);
-  });
+  .then(todo => res.json(todo));
 });
 
 router.post('/todos', (req, res) => {
   Todo.create(req.body)
-    .then(todo => {
-      res.redirect('/todos');
-    })
-    .catch(console.error);
+    .then(todo => res.json(todo))
 });
 
 module.exports = router;
